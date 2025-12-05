@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import { games, detectiveColors, findGame, createGame } from "../state";
+import { supabase } from "@/lib/supabaseAdmin";
+import { detectiveColors, generateGameId } from "@/lib/colors";
 
 export async function POST(request) {
   const body = await request.json();
@@ -10,27 +11,67 @@ export async function POST(request) {
   }
 
   const cleanName = name.trim();
-
-  // Determine which game to use
   const trimmedGameId = (gameId || "").trim().toUpperCase();
 
-  let game;
-  if (!trimmedGameId) {
-    // No gameId -> create a new game automatically
-    game = createGame();
+  // 1. Load or create game
+  let finalGameId = trimmedGameId;
+
+  if (!finalGameId) {
+    // Create new game
+    finalGameId = generateGameId();
+    const { error: gameInsertError } = await supabase
+      .from("games")
+      .insert({ id: finalGameId });
+
+    if (gameInsertError) {
+      console.error("Error creating game:", gameInsertError);
+      return NextResponse.json(
+        { error: "Could not create game" },
+        { status: 500 }
+      );
+    }
   } else {
-    game = findGame(trimmedGameId);
+    const { data: game, error: gameError } = await supabase
+      .from("games")
+      .select("id")
+      .eq("id", finalGameId)
+      .maybeSingle();
+
+    if (gameError) {
+      console.error("Error fetching game:", gameError);
+      return NextResponse.json(
+        { error: "Could not load game" },
+        { status: 500 }
+      );
+    }
+
     if (!game) {
       return NextResponse.json({ error: "Game not found" }, { status: 404 });
     }
   }
 
-  // Validate requested role
+  // 2. Get current players in this game
+  const { data: players, error: playersError } = await supabase
+    .from("players")
+    .select("*")
+    .eq("game_id", finalGameId);
+
+  if (playersError) {
+    console.error("Error fetching players:", playersError);
+    return NextResponse.json(
+      { error: "Could not load players" },
+      { status: 500 }
+    );
+  }
+
+  const allPlayers = players || [];
+
+  // 3. Decide role
   let role = requestedRole === "mr_x" ? "mr_x" : "detective";
 
-  // Enforce single Mr. X per game
+  // enforce single Mr. X
   if (role === "mr_x") {
-    const existingMrX = game.players.find((p) => p.role === "mr_x");
+    const existingMrX = allPlayers.find((p) => p.role === "mr_x");
     if (existingMrX) {
       return NextResponse.json(
         { error: "Mr. X is already taken in this game. Please choose Detective." },
@@ -39,30 +80,44 @@ export async function POST(request) {
     }
   }
 
-  // Assign color for detectives in this game
+  // 4. Assign color for detectives
   let color = null;
   if (role === "detective") {
-    const usedColors = game.players
+    const usedColors = allPlayers
       .filter((p) => p.role === "detective" && p.color)
       .map((p) => p.color);
 
     const availableColor =
       detectiveColors.find((c) => !usedColors.includes(c)) ||
-      detectiveColors[game.players.length % detectiveColors.length];
+      detectiveColors[allPlayers.length % detectiveColors.length];
 
     color = availableColor;
   }
 
-  const id = crypto.randomUUID();
+  // 5. Insert player
+  const { data: inserted, error: insertError } = await supabase
+    .from("players")
+    .insert({
+      game_id: finalGameId,
+      name: cleanName,
+      role,
+      color
+    })
+    .select("id, role, color")
+    .single();
 
-  game.players.push({
-    id,
-    name: cleanName,
-    role,
-    color,
-    position: undefined,
-    route: []
+  if (insertError) {
+    console.error("Error inserting player:", insertError);
+    return NextResponse.json(
+      { error: "Could not join game" },
+      { status: 500 }
+    );
+  }
+
+  return NextResponse.json({
+    playerId: inserted.id,
+    role: inserted.role,
+    color: inserted.color,
+    gameId: finalGameId
   });
-
-  return NextResponse.json({ playerId: id, role, color, gameId: game.id });
 }
