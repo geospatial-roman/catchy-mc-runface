@@ -1,13 +1,34 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import {
-  MapContainer,
-  TileLayer,
-  Polygon,
-  Tooltip,
-  CircleMarker
-} from "react-leaflet";
+import dynamic from "next/dynamic";
+
+// Dynamically import react-leaflet components on client only
+const MapContainer = dynamic(
+  () => import("react-leaflet").then((m) => m.MapContainer),
+  { ssr: false }
+);
+
+const TileLayer = dynamic(
+  () => import("react-leaflet").then((m) => m.TileLayer),
+  { ssr: false }
+);
+
+const Polygon = dynamic(
+  () => import("react-leaflet").then((m) => m.Polygon),
+  { ssr: false }
+);
+
+const Tooltip = dynamic(
+  () => import("react-leaflet").then((m) => m.Tooltip),
+  { ssr: false }
+);
+
+const CircleMarker = dynamic(
+  () => import("react-leaflet").then((m) => m.CircleMarker),
+  { ssr: false }
+);
+
 import * as turf from "@turf/turf";
 
 const defaultCenter = [51.505, -0.09]; // fallback map center
