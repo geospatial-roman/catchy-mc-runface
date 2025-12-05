@@ -3,6 +3,12 @@ import { supabase } from "@/lib/supabaseAdmin";
 import { detectiveColors, generateGameId } from "@/lib/colors";
 
 export async function POST(request) {
+  if (!supabase) {
+    return NextResponse.json(
+      { error: "Supabase is not configured on the server" },
+      { status: 500 }
+    );
+  }
   const body = await request.json();
   const { name, role: requestedRole, gameId } = body;
 

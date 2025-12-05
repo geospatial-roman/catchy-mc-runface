@@ -2,6 +2,12 @@ import { NextResponse } from "next/server";
 import { supabase } from "@/lib/supabaseAdmin";
 
 export async function POST(request) {
+  if (!supabase) {
+    return NextResponse.json(
+      { error: "Supabase is not configured on the server" },
+      { status: 500 }
+    );
+  }
   const body = await request.json();
   const { playerId, position, gameId } = body; // position: [lng, lat]
 

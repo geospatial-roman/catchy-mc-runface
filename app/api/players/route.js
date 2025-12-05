@@ -2,6 +2,12 @@ import { NextResponse } from "next/server";
 import { supabase } from "@/lib/supabaseAdmin";
 
 export async function GET(request) {
+  if (!supabase) {
+    return NextResponse.json(
+      { error: "Supabase is not configured on the server" },
+      { status: 500 }
+    );
+  }
   const { searchParams } = new URL(request.url);
   const gameId = searchParams.get("gameId");
   const trimmedGameId = (gameId || "").trim().toUpperCase();
