@@ -317,7 +317,7 @@ export default function HomePage() {
       ([lng, lat]) => [lat, lng]
     );
 
-  // ------------------------------------------------------------
+    // ------------------------------------------------------------
   // Lobby UI
   // ------------------------------------------------------------
   if (stage === "lobby") {
@@ -325,165 +325,236 @@ export default function HomePage() {
       <div
         style={{
           minHeight: "100vh",
-          maxWidth: 520,
-          margin: "0 auto",
-          padding: "1.5rem"
+          width: "100vw",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          padding: "1.5rem",
+          backgroundImage: 'url("/munich-map-bg.png")',
+          backgroundSize: "cover",
+          backgroundPosition: "center",
         }}
       >
-        <h1 style={{ fontSize: "1.8rem", fontWeight: 700, marginBottom: "1rem" }}>
-          Real-Life Scotland Yard
-        </h1>
-
-        {/* Game mode selection */}
+        {/* Card on top of the background */}
         <div
           style={{
-            display: "flex",
-            gap: "0.75rem",
-            marginBottom: "1rem"
+            width: "100%",
+            maxWidth: 520,
+            padding: "1.5rem",
+            borderRadius: 16,
+            backgroundColor: "rgba(255,255,255,0.92)",
+            boxShadow: "0 12px 30px rgba(0,0,0,0.25)",
+            backdropFilter: "blur(6px)",
           }}
         >
-          <button
-            type="button"
-            onClick={() => setGameMode("new")}
+          <h1
             style={{
-              flex: 1,
-              padding: "0.5rem",
-              borderRadius: 6,
-              border: gameMode === "new" ? "2px solid #2563eb" : "1px solid #d1d5db",
-              backgroundColor: gameMode === "new" ? "#eff6ff" : "white",
-              fontWeight: 600
+              fontSize: "1.8rem",
+              fontWeight: 700,
+              marginBottom: "1rem",
+              textAlign: "center",
             }}
           >
-            Start new game
-          </button>
-          <button
-            type="button"
-            onClick={() => setGameMode("join")}
-            style={{
-              flex: 1,
-              padding: "0.5rem",
-              borderRadius: 6,
-              border: gameMode === "join" ? "2px solid #2563eb" : "1px solid #d1d5db",
-              backgroundColor: gameMode === "join" ? "#eff6ff" : "white",
-              fontWeight: 600
-            }}
-          >
-            Join game
-          </button>
-        </div>
+            Catchy McRunface
+          </h1>
 
-        {/* Game ID section */}
-        {gameMode === "new" ? (
-          <div style={{ marginBottom: "1rem", fontSize: "0.95rem", color: "#4b5563" }}>
-            When you join, a game ID will be created automatically.
-            <br />
-            You&apos;ll see it in the waiting room and in the game view and can share it
-            with your friends.
-          </div>
-        ) : (
-          <div style={{ marginBottom: "1rem" }}>
-            <p style={{ marginBottom: "0.25rem", fontWeight: 600 }}>
-              Enter game ID to join:
-            </p>
-            <input
-              type="text"
-              value={gameId}
-              onChange={(e) => setGameId(e.target.value.toUpperCase())}
-              placeholder="e.g. F7K2XP"
+          {/* Game mode selection */}
+          <div
+            style={{
+              display: "flex",
+              gap: "0.75rem",
+              marginBottom: "1rem",
+            }}
+          >
+            <button
+              type="button"
+              onClick={() => setGameMode("new")}
               style={{
-                width: "100%",
+                flex: 1,
                 padding: "0.5rem",
-                borderRadius: 4,
-                border: "1px solid #ccc"
+                borderRadius: 6,
+                border:
+                  gameMode === "new"
+                    ? "2px solid #2563eb"
+                    : "1px solid #d1d5db",
+                backgroundColor:
+                  gameMode === "new" ? "#eff6ff" : "rgba(255,255,255,0.9)",
+                fontWeight: 600,
+                cursor: "pointer",
               }}
-            />
+            >
+              Start new game
+            </button>
+            <button
+              type="button"
+              onClick={() => setGameMode("join")}
+              style={{
+                flex: 1,
+                padding: "0.5rem",
+                borderRadius: 6,
+                border:
+                  gameMode === "join"
+                    ? "2px solid #2563eb"
+                    : "1px solid #d1d5db",
+                backgroundColor:
+                  gameMode === "join" ? "#eff6ff" : "rgba(255,255,255,0.9)",
+                fontWeight: 600,
+                cursor: "pointer",
+              }}
+            >
+              Join game
+            </button>
           </div>
-        )}
 
-        {/* Name + role */}
-        <label style={{ display: "block", marginBottom: "0.25rem", marginTop: "0.5rem" }}>
-          Enter your name:
-        </label>
-        <input
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          style={{
-            width: "100%",
-            padding: "0.5rem",
-            borderRadius: 4,
-            border: "1px solid #ccc",
-            marginBottom: "1rem"
-          }}
-          placeholder="Detective Alice / Mr. X"
-        />
+          {/* Game ID section */}
+          {gameMode === "new" ? (
+            <div
+              style={{
+                marginBottom: "1rem",
+                fontSize: "0.95rem",
+                color: "#4b5563",
+              }}
+            >
+              When you join, a game ID will be created automatically.
+              <br />
+              You&apos;ll see it in the waiting room and in the game view and
+              can share it with your friends.
+            </div>
+          ) : (
+            <div style={{ marginBottom: "1rem" }}>
+              <p
+                style={{ marginBottom: "0.25rem", fontWeight: 600 }}
+              >
+                Enter game ID to join:
+              </p>
+              <input
+                type="text"
+                value={gameId}
+                onChange={(e) =>
+                  setGameId(e.target.value.toUpperCase())
+                }
+                placeholder="e.g. F7K2XP"
+                style={{
+                  width: "100%",
+                  padding: "0.5rem",
+                  borderRadius: 4,
+                  border: "1px solid #ccc",
+                  backgroundColor: "rgba(255,255,255,0.9)",
+                }}
+              />
+            </div>
+          )}
 
-        <div style={{ marginBottom: "1rem" }}>
-          <p style={{ marginBottom: "0.25rem", fontWeight: 600 }}>Choose your role:</p>
-          <label style={{ marginRight: "1rem" }}>
-            <input
-              type="radio"
-              name="role"
-              value="detective"
-              checked={role === "detective"}
-              onChange={() => setRole("detective")}
-            />{" "}
-            Detective
+          {/* Name + role */}
+          <label
+            style={{
+              display: "block",
+              marginBottom: "0.25rem",
+              marginTop: "0.5rem",
+            }}
+          >
+            Enter your name:
           </label>
-          <label>
-            <input
-              type="radio"
-              name="role"
-              value="mr_x"
-              checked={role === "mr_x"}
-              onChange={() => setRole("mr_x")}
-            />{" "}
-            Mr. X
-          </label>
+          <input
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            style={{
+              width: "100%",
+              padding: "0.5rem",
+              borderRadius: 4,
+              border: "1px solid #ccc",
+              marginBottom: "1rem",
+              backgroundColor: "rgba(255,255,255,0.9)",
+            }}
+            placeholder="Detective Alice / Mr. X"
+          />
+
+          <div style={{ marginBottom: "1rem" }}>
+            <p
+              style={{ marginBottom: "0.25rem", fontWeight: 600 }}
+            >
+              Choose your role:
+            </p>
+            <label style={{ marginRight: "1rem" }}>
+              <input
+                type="radio"
+                name="role"
+                value="detective"
+                checked={role === "detective"}
+                onChange={() => setRole("detective")}
+              />{" "}
+              Detective
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="role"
+                value="mr_x"
+                checked={role === "mr_x"}
+                onChange={() => setRole("mr_x")}
+              />{" "}
+              Mr. X
+            </label>
+          </div>
+
+          <h2
+            style={{
+              fontSize: "1.3rem",
+              fontWeight: 600,
+              marginBottom: "0.5rem",
+            }}
+          >
+            Rules (City Classic MVP)
+          </h2>
+          <ul style={{ marginLeft: "1.2rem", marginBottom: "1rem" }}>
+            <li>Movement: walking + public transport allowed</li>
+            <li>Max 2 stops per transport ride (not enforced yet)</li>
+            <li>Stay inside the game area</li>
+            <li>Detectives: live updates, each with a unique color</li>
+            <li>Mr. X: location sent every 10 seconds, shown in red</li>
+          </ul>
+
+          <p style={{ marginBottom: "0.5rem" }}>
+            GPS status:{" "}
+            <strong>
+              {gpsReady
+                ? "OK"
+                : "Not ready – allow location in your browser"}
+            </strong>
+          </p>
+          <p style={{ marginBottom: "0.5rem" }}>
+            Inside boundary:{" "}
+            <strong
+              style={{ color: insideBoundary ? "green" : "red" }}
+            >
+              {insideBoundary ? "Yes" : "No"}
+            </strong>
+          </p>
+
+          <button
+            onClick={handleJoinGame}
+            style={{
+              width: "100%",
+              padding: "0.75rem",
+              borderRadius: 6,
+              border: "none",
+              fontWeight: 600,
+              backgroundColor: "#2563eb",
+              color: "white",
+              opacity: gpsReady ? 1 : 0.7,
+              cursor: "pointer",
+            }}
+          >
+            Join Game
+          </button>
         </div>
-
-        <h2 style={{ fontSize: "1.3rem", fontWeight: 600, marginBottom: "0.5rem" }}>
-          Rules (City Classic MVP)
-        </h2>
-        <ul style={{ marginLeft: "1.2rem", marginBottom: "1rem" }}>
-          <li>Movement: walking + public transport allowed</li>
-          <li>Max 2 stops per transport ride (not enforced yet)</li>
-          <li>Stay inside the game area</li>
-          <li>Detectives: live updates, each with a unique color</li>
-          <li>Mr. X: location sent every 10 seconds, shown in red</li>
-        </ul>
-
-        <p style={{ marginBottom: "0.5rem" }}>
-          GPS status:{" "}
-          <strong>{gpsReady ? "OK" : "Not ready – allow location in your browser"}</strong>
-        </p>
-        <p style={{ marginBottom: "0.5rem" }}>
-          Inside boundary:{" "}
-          <strong style={{ color: insideBoundary ? "green" : "red" }}>
-            {insideBoundary ? "Yes" : "No"}
-          </strong>
-        </p>
-
-        <button
-          onClick={handleJoinGame}
-          style={{
-            width: "100%",
-            padding: "0.75rem",
-            borderRadius: 6,
-            border: "none",
-            fontWeight: 600,
-            backgroundColor: "#2563eb",
-            color: "white",
-            opacity: gpsReady ? 1 : 0.7
-          }}
-        >
-          Join Game
-        </button>
       </div>
     );
   }
 
-  // ------------------------------------------------------------
+
+    // ------------------------------------------------------------
   // Waiting for Mr. X UI (with detective list)
   // ------------------------------------------------------------
   if (stage === "waiting") {
@@ -493,72 +564,101 @@ export default function HomePage() {
       <div
         style={{
           minHeight: "100vh",
-          maxWidth: 480,
-          margin: "0 auto",
-          padding: "1.5rem",
+          width: "100vw",
           display: "flex",
-          flexDirection: "column",
           justifyContent: "center",
-          textAlign: "center"
+          alignItems: "center",
+          padding: "1.5rem",
+          backgroundImage: 'url("/munich-map-bg.png")',
+          backgroundSize: "cover",
+          backgroundPosition: "center",
         }}
       >
-        <div className="spinner" />
-        <h2 style={{ marginBottom: "0.5rem" }}>Waiting for Mr. X to join.</h2>
-        <p style={{ color: "#555", marginBottom: "1.5rem" }}>
-          You joined as a detective in game{" "}
-          <span style={{ fontFamily: "monospace", fontWeight: 700 }}>{gameId}</span>. The
-          game will start automatically when Mr. X joins.
-        </p>
-
         <div
           style={{
-            textAlign: "left",
-            border: "1px solid #e5e7eb",
-            borderRadius: 8,
-            padding: "0.75rem",
-            backgroundColor: "#f9fafb"
+            width: "100%",
+            maxWidth: 480,
+            padding: "1.5rem",
+            borderRadius: 16,
+            backgroundColor: "rgba(255,255,255,0.92)",
+            boxShadow: "0 12px 30px rgba(0,0,0,0.25)",
+            backdropFilter: "blur(6px)",
+            textAlign: "center",
           }}
         >
-          <h3
-            style={{
-              fontSize: "1rem",
-              fontWeight: 600,
-              marginBottom: "0.5rem"
-            }}
-          >
-            Connected detectives
-          </h3>
-          {detectives.length === 0 && (
-            <p style={{ fontSize: "0.9rem", color: "#6b7280" }}>
-              No other detectives yet. Share the game ID with your friends!
-            </p>
-          )}
-          {detectives.map((d) => (
-            <div
-              key={d.id}
+          <div className="spinner" />
+          <h2 style={{ marginBottom: "0.5rem" }}>
+            Waiting for Mr. X to join.
+          </h2>
+          <p style={{ color: "#555", marginBottom: "1.5rem" }}>
+            You joined as a detective in game{" "}
+            <span
               style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "0.5rem",
-                marginBottom: "0.25rem"
+                fontFamily: "monospace",
+                fontWeight: 700,
               }}
             >
-              <span
+              {gameId}
+            </span>
+            . The game will start automatically when Mr. X joins.
+          </p>
+
+          <div
+            style={{
+              textAlign: "left",
+              border: "1px solid #e5e7eb",
+              borderRadius: 8,
+              padding: "0.75rem",
+              backgroundColor: "#f9fafb",
+            }}
+          >
+            <h3
+              style={{
+                fontSize: "1rem",
+                fontWeight: 600,
+                marginBottom: "0.5rem",
+              }}
+            >
+              Connected detectives
+            </h3>
+            {detectives.length === 0 && (
+              <p
                 style={{
-                  width: 12,
-                  height: 12,
-                  borderRadius: "50%",
-                  backgroundColor: d.color || "blue",
-                  display: "inline-block"
+                  fontSize: "0.9rem",
+                  color: "#6b7280",
                 }}
-              />
-              <span style={{ fontSize: "0.95rem" }}>{d.name}</span>
-            </div>
-          ))}
+              >
+                No other detectives yet. Share the game ID with your friends!
+              </p>
+            )}
+            {detectives.map((d) => (
+              <div
+                key={d.id}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "0.5rem",
+                  marginBottom: "0.25rem",
+                }}
+              >
+                <span
+                  style={{
+                    width: 12,
+                    height: 12,
+                    borderRadius: "50%",
+                    backgroundColor: d.color || "blue",
+                    display: "inline-block",
+                  }}
+                />
+                <span style={{ fontSize: "0.95rem" }}>{d.name}</span>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     );
   }
+
 
   // ------------------------------------------------------------
   // Game map UI
@@ -627,8 +727,8 @@ export default function HomePage() {
             <CircleMarker
               key={pl.id}
               center={[lat, lng]}
-              radius={10}
-              pathOptions={{ color, fillColor: color, fillOpacity: 0.8 }}
+              radius={5}
+              pathOptions={{ color, fillColor: color, fillOpacity: 0.6 }}
             >
               <Tooltip permanent direction="top" offset={[0, -10]}>
                 <span>
