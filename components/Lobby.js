@@ -1,3 +1,4 @@
+import { useState } from "react";
 import styles from "./Lobby.module.css";
 
 export default function Lobby({
@@ -13,8 +14,24 @@ export default function Lobby({
   insideBoundary,
   handleJoinGame,
   onDefineArea,
-  hasBoundary
+  hasBoundary,
+  onSelectPredefinedArea,
+
 }) {
+  const [presetsOpen, setPresetsOpen] = useState(false);
+  const [selectedPreset, setSelectedPreset] = useState(null);
+
+
+	const handlePresetClick = async (key, label) => {
+	  if (onSelectPredefinedArea) {
+		await onSelectPredefinedArea(key);
+	  }
+	  setSelectedPreset(label);
+	  setPresetsOpen(false);
+	};
+
+
+
   return (
     <div className={styles.background}>
       <div className={styles.card}>
@@ -42,36 +59,62 @@ export default function Lobby({
           </button>
         </div>
 
-        {/* Game ID section */}
+        {/* Game ID section - only for join */}
         {gameMode === "join" && (
-			  <div className={styles.gameIdBlock}>
-				<p className={styles.labelStrong}>Enter game ID to join:</p>
-				<input
-				  type="text"
-				  value={gameId}
-				  onChange={(e) => setGameId(e.target.value.toUpperCase())}
-				  placeholder="e.g. F7K2XP"
-				  className={styles.textInput}
-				/>
-			  </div>
+          <div className={styles.gameIdBlock}>
+            <p className={styles.labelStrong}>Enter game ID to join:</p>
+            <input
+              type="text"
+              value={gameId}
+              onChange={(e) => setGameId(e.target.value.toUpperCase())}
+              placeholder="e.g. F7K2XP"
+              className={styles.textInput}
+            />
+          </div>
+        )}
+
+        {/* NEW: define/select area for new games */}
+        {gameMode === "new" && (
+          <div className={styles.areaBlock}>
+            <div className={styles.areaButtonsRow}>
+              <button
+                type="button"
+                className={styles.areaButton}
+                onClick={onDefineArea}
+              >
+                Define game area
+              </button>
+              <button
+                type="button"
+                className={styles.selectAreaButton}
+                onClick={() => setPresetsOpen((prev) => !prev)}
+              >
+                Select game area
+              </button>
+            </div>
+
+            {presetsOpen && (
+              <div className={styles.areaPresets}>
+                <button
+				  type="button"
+				  className={styles.presetItem}
+				  onClick={() => handlePresetClick("munich-classic", "Munich Classic")}
+				>
+				  Munich Classic
+				</button>
+
+                {/* add more presets here later */}
+              </div>
+            )}
+
+
+
+			{selectedPreset && (
+		  	<p className={styles.areaPresetBadge}>Selected: {selectedPreset}</p>
 			)}
 
-		{gameMode === "new" && (
-		  <div className={styles.areaBlock}>
-			<button
-			  type="button"
-			  className={styles.areaButton}
-			  onClick={onDefineArea}
-			>
-			  Define game area
-			</button>
-			<p className={styles.areaStatus}>
-			  {hasBoundary ? "Game area defined." : "No custom game area yet."}
-			</p>
-		  </div>
-		)}
-
-
+          </div>
+        )}
 
         {/* Name + role */}
         <label className={styles.label}>Enter your name:</label>

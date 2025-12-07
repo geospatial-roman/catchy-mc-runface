@@ -1,10 +1,11 @@
 .root {
   width: 100vw;
-  height: 100vh;
+  height: 100dvh; /* better on mobile than 100vh */
   display: flex;
   flex-direction: column;
   position: relative;
   background-color: #020617;
+  overflow: hidden;
 }
 
 /* Top bar */
@@ -74,6 +75,26 @@
   margin-right: 0.3rem;
 }
 
+.toolsSeparator {
+  opacity: 0.6;
+  margin: 0 0.4rem;
+}
+
+.drawToggle {
+  padding: 0.25rem 0.7rem;
+  border-radius: 999px;
+  border: 1px solid #4b5563;
+  background-color: transparent;
+  color: #e5e7eb;
+  cursor: pointer;
+  font-size: 0.78rem;
+}
+
+.drawToggleActive {
+  border-color: #f97316;
+  background-color: rgba(249, 115, 22, 0.25);
+}
+
 .toolButton {
   padding: 0.25rem 0.6rem;
   border-radius: 999px;
@@ -93,6 +114,7 @@
 
 .mapWrapper {
   flex: 1;
+  min-height: 0; /* important for flex child with scrollable content */
   position: relative;
 }
 
@@ -165,54 +187,49 @@
   cursor: default;
 }
 
-.toolsBar {
-  position: relative;
-  z-index: 9;
-  padding: 0.4rem 1rem;
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  background-color: rgba(15, 23, 42, 0.92);
-  color: #e5e7eb;
-  font-size: 0.8rem;
-}
+/* ---------- Mobile adjustments ---------- */
 
-.toolsLabel {
-  opacity: 0.9;
-  margin-right: 0.3rem;
-}
+@media (max-width: 640px) {
+  .topBar {
+    padding: 0.5rem 0.75rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.4rem;
+  }
 
-.toolsSeparator {
-  opacity: 0.6;
-  margin: 0 0.4rem;
-}
+  .topBarLeft {
+    max-width: 100%;
+  }
 
-.drawToggle {
-  padding: 0.25rem 0.7rem;
-  border-radius: 999px;
-  border: 1px solid #4b5563;
-  background-color: transparent;
-  color: #e5e7eb;
-  cursor: pointer;
-  font-size: 0.78rem;
-}
+  .title {
+    font-size: 0.95rem;
+  }
 
-.drawToggleActive {
-  border-color: #f97316;
-  background-color: rgba(249, 115, 22, 0.25);
-}
+  .subtitle {
+    font-size: 0.8rem;
+  }
 
-.toolButton {
-  padding: 0.25rem 0.6rem;
-  border-radius: 999px;
-  border: 1px solid #4b5563;
-  background-color: transparent;
-  color: #e5e7eb;
-  cursor: pointer;
-  font-size: 0.78rem;
-}
+  .topBarRight {
+    width: 100%;
+    justify-content: flex-end;
+  }
 
-.toolButtonActive {
-  border-color: #22c55e;
-  background-color: rgba(34, 197, 94, 0.15);
+  .toolsBar {
+    padding: 0.35rem 0.75rem;
+    flex-wrap: wrap;
+    row-gap: 0.3rem;
+  }
+
+  .bottomBar {
+    padding: 0.4rem 0.75rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .bottomRight {
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
 }

@@ -48,6 +48,9 @@ export default function HomePage() {
   // Responsive flag
   const [isMobile, setIsMobile] = useState(false);
 
+  const [selectedPreset, setSelectedPreset] = useState(null);
+
+
 
 
   // Mobile/desktop detection
@@ -283,15 +286,39 @@ export default function HomePage() {
 		  setStage("define-area");
 		};
 
-		const handleSaveDefinedArea = (geojson) => {
-		  setBoundary(geojson);
-		  // Recompute "insideBoundary" immediately if we already have a GPS fix
-		  if (position) {
-			setInsideBoundary(checkInsideBoundary(position, geojson));
-		  }
-		  setStage("lobby");
-		};
 
+
+	const handleSaveDefinedArea = (geojson) => {
+  setBoundary(geojson);
+  setSelectedPreset("User Defined");   // ← THIS SETS THE BADGE
+
+  if (position) {
+    setInsideBoundary(checkInsideBoundary(position, geojson));
+  }
+
+  setStage("lobby");
+};
+
+
+
+	const handleSelectPredefinedArea = async (key) => {
+	  try {
+		if (key === "munich-classic") {
+		  const res = await fetch("/border.geojson");
+		  if (!res.ok) throw new Error("Failed to load border.geojson");
+		  const data = await res.json();
+		  setBoundary(data);
+
+		  if (position) {
+			setInsideBoundary(checkInsideBoundary(position, data));
+		  }
+		}
+		// you can add more keys here later
+	  } catch (err) {
+		console.error("Failed to load predefined game area", err);
+		alert("Could not load predefined game area.");
+	  }
+	};
 
   const handleJoinGame = async () => {
     if (!gpsReady || !position) {
@@ -431,6 +458,10 @@ export default function HomePage() {
         handleJoinGame={handleJoinGame}
         onDefineArea={handleOpenDefineArea}
       	hasBoundary={!!boundary}
+      	onSelectPredefinedArea={handleSelectPredefinedArea}
+      	selectedPreset={selectedPreset}
+        setSelectedPreset={setSelectedPreset}
+
       />
     );
   }
