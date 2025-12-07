@@ -1,0 +1,218 @@
+.root {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  background-color: #020617;
+}
+
+/* Top bar */
+
+.topBar {
+  position: relative;
+  z-index: 10;
+  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  background: linear-gradient(
+    to bottom,
+    rgba(15, 23, 42, 0.95),
+    rgba(15, 23, 42, 0.7)
+  );
+  color: #e5e7eb;
+}
+
+.topBarLeft {
+  max-width: 70%;
+}
+
+.title {
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.subtitle {
+  font-size: 0.85rem;
+  opacity: 0.85;
+}
+
+.topBarRight {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.topButton {
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  border: 1px solid #4b5563;
+  background-color: transparent;
+  color: #e5e7eb;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+/* Tools bar */
+
+.toolsBar {
+  position: relative;
+  z-index: 9;
+  padding: 0.4rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  background-color: rgba(15, 23, 42, 0.92);
+  color: #e5e7eb;
+  font-size: 0.8rem;
+}
+
+.toolsLabel {
+  opacity: 0.9;
+  margin-right: 0.3rem;
+}
+
+.toolButton {
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid #4b5563;
+  background-color: transparent;
+  color: #e5e7eb;
+  cursor: pointer;
+  font-size: 0.78rem;
+}
+
+.toolButtonActive {
+  border-color: #22c55e;
+  background-color: rgba(34, 197, 94, 0.15);
+}
+
+/* Map */
+
+.mapWrapper {
+  flex: 1;
+  position: relative;
+}
+
+.map {
+  width: 100%;
+  height: 100%;
+}
+
+/* Bottom bar */
+
+.bottomBar {
+  position: relative;
+  z-index: 10;
+  padding: 0.5rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  background: linear-gradient(
+    to top,
+    rgba(15, 23, 42, 0.95),
+    rgba(15, 23, 42, 0.7)
+  );
+  color: #e5e7eb;
+  font-size: 0.8rem;
+}
+
+.bottomLeft {
+  display: flex;
+  align-items: center;
+}
+
+.infoText {
+  opacity: 0.95;
+}
+
+.bottomRight {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.secondaryButton {
+  padding: 0.3rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid #4b5563;
+  background-color: transparent;
+  color: #e5e7eb;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.secondaryButton:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.primaryButton {
+  padding: 0.3rem 0.8rem;
+  border-radius: 999px;
+  border: none;
+  background-color: #22c55e;
+  color: #022c22;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.primaryButton:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.toolsBar {
+  position: relative;
+  z-index: 9;
+  padding: 0.4rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  background-color: rgba(15, 23, 42, 0.92);
+  color: #e5e7eb;
+  font-size: 0.8rem;
+}
+
+.toolsLabel {
+  opacity: 0.9;
+  margin-right: 0.3rem;
+}
+
+.toolsSeparator {
+  opacity: 0.6;
+  margin: 0 0.4rem;
+}
+
+.drawToggle {
+  padding: 0.25rem 0.7rem;
+  border-radius: 999px;
+  border: 1px solid #4b5563;
+  background-color: transparent;
+  color: #e5e7eb;
+  cursor: pointer;
+  font-size: 0.78rem;
+}
+
+.drawToggleActive {
+  border-color: #f97316;
+  background-color: rgba(249, 115, 22, 0.25);
+}
+
+.toolButton {
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid #4b5563;
+  background-color: transparent;
+  color: #e5e7eb;
+  cursor: pointer;
+  font-size: 0.78rem;
+}
+
+.toolButtonActive {
+  border-color: #22c55e;
+  background-color: rgba(34, 197, 94, 0.15);
+}

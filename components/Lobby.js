@@ -11,7 +11,9 @@ export default function Lobby({
   setGameId,
   gpsReady,
   insideBoundary,
-  handleJoinGame
+  handleJoinGame,
+  onDefineArea,
+  hasBoundary
 }) {
   return (
     <div className={styles.background}>
@@ -53,6 +55,22 @@ export default function Lobby({
 				/>
 			  </div>
 			)}
+
+		{gameMode === "new" && (
+		  <div className={styles.areaBlock}>
+			<button
+			  type="button"
+			  className={styles.areaButton}
+			  onClick={onDefineArea}
+			>
+			  Define game area
+			</button>
+			<p className={styles.areaStatus}>
+			  {hasBoundary ? "Game area defined." : "No custom game area yet."}
+			</p>
+		  </div>
+		)}
+
 
 
         {/* Name + role */}

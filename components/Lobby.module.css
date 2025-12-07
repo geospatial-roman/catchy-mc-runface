@@ -120,3 +120,22 @@
 .joinButtonDisabled {
   opacity: 0.7;
 }
+.areaBlock {
+  margin-bottom: 1rem;
+}
+
+.areaButton {
+  padding: 0.4rem 0.8rem;
+  border-radius: 999px;
+  border: 1px solid #2563eb;
+  background-color: #eff6ff;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.areaStatus {
+  margin-top: 0.3rem;
+  font-size: 0.8rem;
+  color: #4b5563;
+}

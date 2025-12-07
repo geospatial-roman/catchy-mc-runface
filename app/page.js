@@ -6,6 +6,8 @@ import * as turf from "@turf/turf";
 import Lobby from "../components/Lobby";
 import WaitingRoom from "../components/WaitingRoom";
 import GameMapView from "../components/GameMapView";
+import DefineAreaMap from "../components/DefineAreaMap"; // ⬅️ NEW
+
 
 // Munich center
 const defaultCenter = [48.13721715108601, 11.576205475595202];
@@ -46,19 +48,7 @@ export default function HomePage() {
   // Responsive flag
   const [isMobile, setIsMobile] = useState(false);
 
-  // Load border.geojson
-  useEffect(() => {
-    const loadBoundary = async () => {
-      try {
-        const res = await fetch("/border.geojson");
-        const data = await res.json();
-        setBoundary(data);
-      } catch (err) {
-        console.error("Failed to load border.geojson", err);
-      }
-    };
-    loadBoundary();
-  }, []);
+
 
   // Mobile/desktop detection
   useEffect(() => {
@@ -289,6 +279,20 @@ export default function HomePage() {
     return d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
   };
 
+  const handleOpenDefineArea = () => {
+		  setStage("define-area");
+		};
+
+		const handleSaveDefinedArea = (geojson) => {
+		  setBoundary(geojson);
+		  // Recompute "insideBoundary" immediately if we already have a GPS fix
+		  if (position) {
+			setInsideBoundary(checkInsideBoundary(position, geojson));
+		  }
+		  setStage("lobby");
+		};
+
+
   const handleJoinGame = async () => {
     if (!gpsReady || !position) {
       alert("Waiting for GPS… make sure location is enabled.");
@@ -337,6 +341,40 @@ export default function HomePage() {
       setChatUnread(0);
       lastMessageTimeRef.current = null;
       setSelectedChatChannel("all");
+
+      // persist it to Supabase for this game
+		if (gameMode === "new" && boundary) {
+		  try {
+			await fetch("/api/game-boundary", {
+			  method: "POST",
+			  headers: { "Content-Type": "application/json" },
+			  body: JSON.stringify({
+				gameId: joinedGameId,
+				boundary
+			  })
+			});
+		  } catch (err) {
+			console.error("Failed to save game boundary", err);
+		  }
+		}
+
+		// NEW: load the boundary from Supabase (for joiners and to confirm host)
+		try {
+		  const resBoundary = await fetch(
+			`/api/game-boundary?gameId=${joinedGameId}`
+		  );
+		  const bData = await resBoundary.json();
+		  if (bData.boundary) {
+			setBoundary(bData.boundary);
+			if (position) {
+			  setInsideBoundary(
+				checkInsideBoundary(position, bData.boundary)
+			  );
+			}
+		  }
+		} catch (err) {
+		  console.error("Failed to load game boundary", err);
+		}
 
       if (joinedRole === "mr_x") {
         setStage("game");
@@ -391,6 +429,8 @@ export default function HomePage() {
         gpsReady={gpsReady}
         insideBoundary={insideBoundary}
         handleJoinGame={handleJoinGame}
+        onDefineArea={handleOpenDefineArea}
+      	hasBoundary={!!boundary}
       />
     );
   }
@@ -421,6 +461,17 @@ export default function HomePage() {
       />
     );
   }
+
+  if (stage === "define-area") {
+	  return (
+		<DefineAreaMap
+		  position={position}
+		  onSaveBoundary={handleSaveDefinedArea}
+		  onCancel={() => setStage("lobby")}
+		/>
+	  );
+	}
+
 
   const center = position || defaultCenter;
   const visibleMessages = chatMessages.filter((m) =>
