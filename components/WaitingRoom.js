@@ -1,4 +1,4 @@
-import { backgroundFull, mainCardBase } from "../lib/layoutStyles";
+import styles from "./WaitingRoom.module.css";
 
 export default function WaitingRoom({
   isMobile,
@@ -16,132 +16,47 @@ export default function WaitingRoom({
   formatTime
 }) {
   return (
-    <div
-      style={{
-        ...backgroundFull,
-        position: "relative"
-      }}
-    >
-      {/* Top-left: Connected detectives panel (desktop only) */}
+    <div className={styles.background}>
+      {/* Desktop detectives panel */}
       {!isMobile && (
-        <div
-          style={{
-            position: "absolute",
-            top: 16,
-            left: 16,
-            maxWidth: 260,
-            padding: "0.75rem",
-            borderRadius: 12,
-            backgroundColor: "rgba(249,250,251,0.95)",
-            boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
-            border: "1px solid #e5e7eb",
-            textAlign: "left",
-            zIndex: 100
-          }}
-        >
-          <h3
-            style={{
-              fontSize: "1rem",
-              fontWeight: 600,
-              marginBottom: "0.5rem"
-            }}
-          >
-            Connected detectives
-          </h3>
+        <div className={styles.detectivesPanelDesktop}>
+          <h3 className={styles.detectivesTitle}>Connected detectives</h3>
           {detectives.length === 0 && (
-            <p style={{ fontSize: "0.9rem", color: "#6b7280" }}>
+            <p className={styles.detectivesEmpty}>
               No other detectives yet. Share the game ID with your friends!
             </p>
           )}
           {detectives.map((d) => (
-            <div
-              key={d.id}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "0.5rem",
-                marginBottom: "0.25rem"
-              }}
-            >
+            <div key={d.id} className={styles.detectiveRow}>
               <span
-                style={{
-                  width: 12,
-                  height: 12,
-                  borderRadius: "50%",
-                  backgroundColor: d.color || "blue",
-                  display: "inline-block"
-                }}
+                className={styles.detectiveColorDot}
+                style={{ backgroundColor: d.color || "blue" }}
               />
-              <span style={{ fontSize: "0.95rem" }}>{d.name}</span>
+              <span className={styles.detectiveName}>{d.name}</span>
             </div>
           ))}
         </div>
       )}
 
       {/* Centered card */}
-      <div
-        style={{
-          minHeight: "100%",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center"
-        }}
-      >
-        <div
-          style={{
-            ...mainCardBase,
-            textAlign: "center",
-            display: "flex",
-            flexDirection: "column",
-            gap: "1rem"
-          }}
-        >
-          {/* Mobile: detectives list inside card */}
+      <div className={styles.centerWrapper}>
+        <div className={styles.card}>
+          {/* Mobile detectives list inside card */}
           {isMobile && (
-            <div
-              style={{
-                marginBottom: "0.5rem",
-                padding: "0.75rem",
-                borderRadius: 10,
-                backgroundColor: "rgba(249,250,251,0.95)",
-                border: "1px solid #e5e7eb",
-                textAlign: "left"
-              }}
-            >
-              <h3
-                style={{
-                  fontSize: "1rem",
-                  fontWeight: 600,
-                  marginBottom: "0.4rem"
-                }}
-              >
-                Connected detectives
-              </h3>
+            <div className={styles.detectivesPanelMobile}>
+              <h3 className={styles.detectivesTitle}>Connected detectives</h3>
               {detectives.length === 0 && (
-                <p style={{ fontSize: "0.9rem", color: "#6b7280" }}>
+                <p className={styles.detectivesEmpty}>
                   No other detectives yet. Share the game ID with your friends!
                 </p>
               )}
               {detectives.map((d) => (
-                <div
-                  key={d.id}
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "0.5rem",
-                    marginBottom: "0.25rem"
-                  }}
-                >
+                <div key={d.id} className={styles.detectiveRow}>
                   <span
-                    style={{
-                      width: 12,
-                      height: 12,
-                      borderRadius: "50%",
-                      backgroundColor: d.color || "blue",
-                      display: "inline-block"
-                    }}
+                    className={styles.detectiveColorDot}
+                    style={{ backgroundColor: d.color || "blue" }}
                   />
-                  <span style={{ fontSize: "0.95rem" }}>{d.name}</span>
+                  <span className={styles.detectiveName}>{d.name}</span>
                 </div>
               ))}
             </div>
@@ -149,75 +64,28 @@ export default function WaitingRoom({
 
           <div>
             <div className="spinner" />
-            <h2 style={{ marginBottom: "0.5rem" }}>
-              Waiting for Mr. X to join.
-            </h2>
-            <p style={{ color: "#555", marginBottom: "0.5rem" }}>
+            <h2 className={styles.waitingTitle}>Waiting for Mr. X to join.</h2>
+            <p className={styles.waitingText}>
               You joined as a detective in game{" "}
-              <span style={{ fontFamily: "monospace", fontWeight: 700 }}>
-                {gameId}
-              </span>
-              . The game will start automatically when Mr. X joins.
+              <span className={styles.gameId}>{gameId}</span>. The game will
+              start automatically when Mr. X joins.
             </p>
           </div>
 
           {/* Chat panel */}
-          <div
-            style={{
-              textAlign: "left",
-              border: "1px solid #e5e7eb",
-              borderRadius: 8,
-              padding: "0.75rem",
-              backgroundColor: "#f9fafb",
-              maxHeight: "280px",
-              display: "flex",
-              flexDirection: "column"
-            }}
-          >
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                marginBottom: "0.4rem"
-              }}
-            >
-              <h3
-                style={{
-                  fontSize: "1rem",
-                  fontWeight: 600
-                }}
-              >
-                Detective chat
-              </h3>
+          <div className={styles.chatPanel}>
+            <div className={styles.chatHeaderRow}>
+              <h3 className={styles.chatTitle}>Detective chat</h3>
             </div>
 
             {/* Channel tabs */}
-            <div
-              style={{
-                display: "flex",
-                gap: "0.35rem",
-                marginBottom: "0.4rem"
-              }}
-            >
+            <div className={styles.chatTabs}>
               <button
                 type="button"
                 onClick={() => setSelectedChatChannel("all")}
-                style={{
-                  flex: 1,
-                  padding: "0.25rem 0.4rem",
-                  borderRadius: 999,
-                  border:
-                    selectedChatChannel === "all"
-                      ? "2px solid #ef4444"
-                      : "1px solid #9ca3af",
-                  backgroundColor:
-                    selectedChatChannel === "all" ? "#f3f4f6" : "white",
-                  color: "#111827",
-                  fontSize: "0.8rem",
-                  fontWeight: 600,
-                  cursor: "pointer"
-                }}
+                className={`${styles.chatTab} ${
+                  selectedChatChannel === "all" ? styles.chatTabAllActive : ""
+                }`}
               >
                 All players
               </button>
@@ -225,39 +93,20 @@ export default function WaitingRoom({
                 <button
                   type="button"
                   onClick={() => setSelectedChatChannel("detectives")}
-                  style={{
-                    flex: 1,
-                    padding: "0.25rem 0.4rem",
-                    borderRadius: 999,
-                    border:
-                      selectedChatChannel === "detectives"
-                        ? "2px solid #16a34a"
-                        : "1px solid #d1d5db",
-                    backgroundColor:
-                      selectedChatChannel === "detectives"
-                        ? "#dcfce7"
-                        : "white",
-                    color: "#064e3b",
-                    fontSize: "0.8rem",
-                    fontWeight: 600,
-                    cursor: "pointer"
-                  }}
+                  className={`${styles.chatTab} ${
+                    selectedChatChannel === "detectives"
+                      ? styles.chatTabDetectivesActive
+                      : ""
+                  }`}
                 >
                   Detectives
                 </button>
               )}
             </div>
 
-            <div
-              style={{
-                flex: 1,
-                overflowY: "auto",
-                marginBottom: "0.5rem",
-                paddingRight: "0.25rem"
-              }}
-            >
+            <div className={styles.chatMessages}>
               {visibleMessages.length === 0 && (
-                <p style={{ fontSize: "0.9rem", color: "#6b7280" }}>
+                <p className={styles.chatEmpty}>
                   No messages yet. Say hi to your fellow detectives!
                 </p>
               )}
@@ -270,11 +119,9 @@ export default function WaitingRoom({
                 let bubbleColor;
 
                 if (inDetectivesChannel) {
-                  // Detectives channel → green theme
                   bubbleBg = isOwn ? "#16a34a" : "#bbf7d0";
                   bubbleColor = isOwn ? "white" : "#064e3b";
                 } else {
-                  // All players channel → grey + red theme
                   bubbleBg = isOwn ? "#b91c1c" : "#e5e7eb";
                   bubbleColor = isOwn ? "white" : "#111827";
                 }
@@ -282,44 +129,22 @@ export default function WaitingRoom({
                 return (
                   <div
                     key={m.id}
-                    style={{
-                      display: "flex",
-                      justifyContent: isOwn ? "flex-end" : "flex-start",
-                      marginBottom: "0.25rem"
-                    }}
+                    className={
+                      isOwn ? styles.chatRowOwn : styles.chatRowOther
+                    }
                   >
                     <div
+                      className={styles.chatBubble}
                       style={{
-                        maxWidth: "80%",
-                        padding: "0.25rem 0.5rem",
-                        borderRadius: 8,
                         backgroundColor: bubbleBg,
-                        color: bubbleColor,
-                        fontSize: "0.85rem"
+                        color: bubbleColor
                       }}
                     >
-                      <div
-                        style={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                          gap: "0.5rem",
-                          marginBottom: "0.1rem"
-                        }}
-                      >
-                        <span
-                          style={{
-                            fontWeight: 600,
-                            fontSize: "0.8rem"
-                          }}
-                        >
+                      <div className={styles.chatBubbleHeader}>
+                        <span className={styles.chatSender}>
                           {m.sender_name}
                         </span>
-                        <span
-                          style={{
-                            fontSize: "0.7rem",
-                            opacity: 0.8
-                          }}
-                        >
+                        <span className={styles.chatTime}>
                           {formatTime(m.created_at)}
                         </span>
                       </div>
@@ -329,13 +154,8 @@ export default function WaitingRoom({
                 );
               })}
             </div>
-            <div
-              style={{
-                display: "flex",
-                gap: "0.5rem",
-                marginTop: "0.25rem"
-              }}
-            >
+
+            <div className={styles.chatInputRow}>
               <input
                 type="text"
                 value={chatInput}
@@ -351,47 +171,22 @@ export default function WaitingRoom({
                     ? "Detectives-only message…"
                     : "Message to all players…"
                 }
-                style={{
-                  flex: 1,
-                  padding: "0.4rem 0.5rem",
-                  borderRadius: 4,
-                  border: "1px solid #d1d5db",
-                  fontSize: "0.9rem"
-                }}
+                className={styles.chatInput}
               />
               <button
                 type="button"
                 onClick={handleSendChat}
-                style={{
-                  padding: "0.4rem 0.7rem",
-                  borderRadius: 6,
-                  border: "none",
-                  backgroundColor: "#2563eb",
-                  color: "white",
-                  fontSize: "0.9rem",
-                  fontWeight: 600,
-                  cursor: "pointer"
-                }}
+                className={styles.chatSendButton}
               >
                 Send
               </button>
             </div>
           </div>
 
-          {/* Back to lobby button */}
           <button
             type="button"
             onClick={handleBackToLobby}
-            style={{
-              alignSelf: "flex-start",
-              marginTop: "0.5rem",
-              padding: "0.4rem 0.8rem",
-              borderRadius: 999,
-              border: "1px solid #d1d5db",
-              backgroundColor: "white",
-              fontSize: "0.85rem",
-              cursor: "pointer"
-            }}
+            className={styles.backButton}
           >
             ← Back to lobby
           </button>

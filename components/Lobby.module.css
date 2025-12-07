@@ -1,0 +1,122 @@
+.background {
+  min-height: 100vh;
+  width: 100vw;
+  padding: 1.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: url("/munich-map-bg.png");
+  background-size: cover;
+  background-position: center;
+}
+
+.card {
+  width: 100%;
+  max-width: 520px;
+  padding: 1.5rem;
+  border-radius: 16px;
+  background-color: rgba(255, 255, 255, 0.82);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(6px);
+}
+
+.title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.modeRow {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.modeButton {
+  flex: 1;
+  padding: 0.5rem;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  background-color: rgba(255, 255, 255, 0.9);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.modeButtonActive {
+  border: 2px solid #2563eb;
+  background-color: #eff6ff;
+}
+
+
+
+.gameIdBlock {
+  margin-bottom: 1rem;
+}
+
+.label {
+  display: block;
+  margin-bottom: 0.25rem;
+  margin-top: 0.5rem;
+}
+
+.labelStrong {
+  margin-bottom: 0.25rem;
+  font-weight: 600;
+}
+
+.textInput {
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  margin-bottom: 1rem;
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+.roleBlock {
+  margin-bottom: 1rem;
+}
+
+.radioLabel {
+  margin-right: 1rem;
+}
+
+.rulesTitle {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.rulesList {
+  margin-left: 1rem;
+  margin-bottom: 1rem;
+  font-size: 0.8rem;
+}
+
+.statusLine {
+  margin-bottom: 0.5rem;
+}
+
+.insideYes {
+  color: green;
+}
+
+.insideNo {
+  color: red;
+}
+
+.joinButton {
+  width: 100%;
+  padding: 0.75rem;
+  border-radius: 6px;
+  border: none;
+  font-weight: 600;
+  background-color: #2563eb;
+  color: white;
+  cursor: pointer;
+}
+
+.joinButtonDisabled {
+  opacity: 0.7;
+}

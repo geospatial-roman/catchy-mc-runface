@@ -1,10 +1,4 @@
-export const metadata = {
-  title: "Real-Life Scotland Yard",
-  description: "MVP for a real-world Scotland Yard game"
-};
 
-import "../styles/globals.css";
-import "leaflet/dist/leaflet.css";
 
 export default function RootLayout({ children }) {
   return (
@@ -13,3 +7,13 @@ export default function RootLayout({ children }) {
     </html>
   );
 }
+
+
+export const metadata = {
+  title: "Catchy McRunface",
+  description: "MVP for a real-world hide and seek game"
+};
+
+import "../styles/globals.css";
+import "leaflet/dist/leaflet.css";
+

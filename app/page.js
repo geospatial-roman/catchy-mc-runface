@@ -46,9 +46,7 @@ export default function HomePage() {
   // Responsive flag
   const [isMobile, setIsMobile] = useState(false);
 
-  // ------------------------------------------------------------
-  // Load the GeoJSON file from the public folder
-  // ------------------------------------------------------------
+  // Load border.geojson
   useEffect(() => {
     const loadBoundary = async () => {
       try {
@@ -62,9 +60,7 @@ export default function HomePage() {
     loadBoundary();
   }, []);
 
-  // ------------------------------------------------------------
-  // Mobile / desktop detection
-  // ------------------------------------------------------------
+  // Mobile/desktop detection
   useEffect(() => {
     if (typeof window === "undefined") return;
 
@@ -77,19 +73,14 @@ export default function HomePage() {
     return () => window.removeEventListener("resize", check);
   }, []);
 
-  // ------------------------------------------------------------
-  // Boundary check using turf
-  // ------------------------------------------------------------
   const checkInsideBoundary = (latLng, geojson) => {
     if (!latLng || !geojson?.features?.[0]) return true;
     const [lat, lng] = latLng;
-    const pt = turf.point([lng, lat]); // GeoJSON order: [lng, lat]
+    const pt = turf.point([lng, lat]);
     return turf.booleanPointInPolygon(pt, geojson.features[0]);
   };
 
-  // ------------------------------------------------------------
   // GPS tracking
-  // ------------------------------------------------------------
   useEffect(() => {
     if (typeof window === "undefined" || !("geolocation" in navigator)) {
       console.warn("Geolocation not available");
@@ -107,13 +98,11 @@ export default function HomePage() {
         }
 
         if (stage === "game") {
-          // log route in memory
           routeRef.current.push({
             t: Date.now(),
-            p: [latLng[1], latLng[0]] // store [lng, lat]
+            p: [latLng[1], latLng[0]]
           });
 
-          // Detectives: send position live
           if (playerId && role === "detective" && gameId) {
             const [lat, lng] = latLng;
             fetch("/api/update-position", {
@@ -122,7 +111,7 @@ export default function HomePage() {
               body: JSON.stringify({
                 playerId,
                 gameId,
-                position: [lng, lat] // [lng, lat]
+                position: [lng, lat]
               })
             }).catch((err) => console.error("Detective update failed", err));
           }
@@ -142,9 +131,7 @@ export default function HomePage() {
     return () => navigator.geolocation.clearWatch(watchId);
   }, [boundary, stage, playerId, role, gameId]);
 
-  // ------------------------------------------------------------
-  // Mr. X: send position every 10 seconds
-  // ------------------------------------------------------------
+  // Mr. X send every 10s
   useEffect(() => {
     if (stage !== "game" || !playerId || role !== "mr_x" || !gameId) return;
 
@@ -159,7 +146,7 @@ export default function HomePage() {
           body: JSON.stringify({
             playerId,
             gameId,
-            position: [lng, lat] // [lng, lat]
+            position: [lng, lat]
           })
         });
       } catch (err) {
@@ -167,17 +154,12 @@ export default function HomePage() {
       }
     };
 
-    // send once immediately
     sendMrXPosition();
-
-    // then every 10 seconds
     const interval = setInterval(sendMrXPosition, 10_000);
     return () => clearInterval(interval);
   }, [stage, playerId, role, position, gameId]);
 
-  // ------------------------------------------------------------
-  // Poll all players from backend (game stage)
-  // ------------------------------------------------------------
+  // Poll players in game
   useEffect(() => {
     if (stage !== "game" || !gameId) return;
 
@@ -185,9 +167,7 @@ export default function HomePage() {
       try {
         const res = await fetch(`/api/players?gameId=${gameId}`);
         const data = await res.json();
-        if (!data.error) {
-          setPlayers(data || []);
-        }
+        if (!data.error) setPlayers(data || []);
       } catch (err) {
         console.error("Failed to fetch players", err);
       }
@@ -196,9 +176,7 @@ export default function HomePage() {
     return () => clearInterval(interval);
   }, [stage, gameId]);
 
-  // ------------------------------------------------------------
-  // Waiting stage: poll for Mr. X + update detective list
-  // ------------------------------------------------------------
+  // Waiting: poll for Mr. X
   useEffect(() => {
     if (stage !== "waiting" || !gameId) return;
 
@@ -210,7 +188,6 @@ export default function HomePage() {
         setPlayers(data || []);
 
         const hasMrX = data.some((p) => p.role === "mr_x");
-
         if (hasMrX) {
           setToast({ message: "Mr. X joined, starting game..." });
           setStage("game");
@@ -224,22 +201,14 @@ export default function HomePage() {
     return () => clearInterval(interval);
   }, [stage, gameId]);
 
-  // ------------------------------------------------------------
   // Toast auto-hide
-  // ------------------------------------------------------------
   useEffect(() => {
     if (!toast) return;
-
-    const timer = setTimeout(() => {
-      setToast(null);
-    }, 4000);
-
+    const timer = setTimeout(() => setToast(null), 4000);
     return () => clearTimeout(timer);
   }, [toast]);
 
-  // ------------------------------------------------------------
-  // CHAT: poll messages in waiting & game stages
-  // ------------------------------------------------------------
+  // Chat polling
   useEffect(() => {
     if (!gameId || (stage !== "waiting" && stage !== "game")) return;
 
@@ -276,20 +245,14 @@ export default function HomePage() {
       }
     };
 
-    // initial fetch
     fetchMessages();
     const interval = setInterval(fetchMessages, 2000);
-
     return () => clearInterval(interval);
   }, [stage, gameId, role, chatOpen]);
 
-  // ------------------------------------------------------------
-  // Send chat message
-  // ------------------------------------------------------------
   const handleSendChat = async () => {
     if (!chatInput.trim() || !gameId) return;
 
-    // Detectives can choose channel; Mr. X always "all"
     let channel = "all";
     if (role === "detective" && selectedChatChannel === "detectives") {
       channel = "detectives";
@@ -315,7 +278,6 @@ export default function HomePage() {
       }
 
       setChatInput("");
-      // Next poll will load the new message
     } catch (err) {
       console.error("Network error sending chat message", err);
     }
@@ -327,9 +289,6 @@ export default function HomePage() {
     return d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
   };
 
-  // ------------------------------------------------------------
-  // Join game (create new or join existing)
-  // ------------------------------------------------------------
   const handleJoinGame = async () => {
     if (!gpsReady || !position) {
       alert("Waiting for GPS… make sure location is enabled.");
@@ -374,7 +333,6 @@ export default function HomePage() {
       setPlayerColor(data.color || null);
       setGameId(joinedGameId);
 
-      // Reset chat state for this game
       setChatMessages([]);
       setChatUnread(0);
       lastMessageTimeRef.current = null;
@@ -383,19 +341,13 @@ export default function HomePage() {
       if (joinedRole === "mr_x") {
         setStage("game");
       } else {
-        // Detective: check if Mr. X is already present
         try {
           const playersRes = await fetch(`/api/players?gameId=${joinedGameId}`);
           const list = await playersRes.json();
-          if (!list.error) {
-            setPlayers(list || []);
-          }
-          const hasMrX = Array.isArray(list) && list.some((p) => p.role === "mr_x");
-          if (hasMrX) {
-            setStage("game");
-          } else {
-            setStage("waiting");
-          }
+          if (!list.error) setPlayers(list || []);
+          const hasMrX =
+            Array.isArray(list) && list.some((p) => p.role === "mr_x");
+          setStage(hasMrX ? "game" : "waiting");
         } catch {
           setStage("waiting");
         }
@@ -406,9 +358,6 @@ export default function HomePage() {
     }
   };
 
-  // ------------------------------------------------------------
-  // Back to lobby with confirmation
-  // ------------------------------------------------------------
   const handleBackToLobby = () => {
     const sure = window.confirm(
       "Do you really want to leave this game and go back to the lobby?"
@@ -423,17 +372,11 @@ export default function HomePage() {
     lastMessageTimeRef.current = null;
   };
 
-  // ------------------------------------------------------------
-  // Convert boundary GeoJSON → Leaflet polygon positions
-  // ------------------------------------------------------------
   const polygonCoords =
     boundary?.features?.[0]?.geometry?.coordinates?.[0]?.map(
       ([lng, lat]) => [lat, lng]
     );
 
-  // ------------------------------------------------------------
-  // Stage-based rendering
-  // ------------------------------------------------------------
   if (stage === "lobby") {
     return (
       <Lobby
@@ -479,7 +422,6 @@ export default function HomePage() {
     );
   }
 
-  // stage === "game"
   const center = position || defaultCenter;
   const visibleMessages = chatMessages.filter((m) =>
     selectedChatChannel === "detectives"
